@@ -38,11 +38,51 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
   }
 });
 
-}
+
 
 
 //spotify-this-song
 
 //movie-this
+} else if (process.argv[2] === "movie-this") {
+
+var request = require("request");
+// Store all of the arguments in an array
+var nodeArgs = process.argv;
+// Create an empty variable for the movie name
+var movieName = "mr+nobody";
+// Loop through the node argument, inclusion of "+"s
+for (var i = 3; i < nodeArgs.length; i++) {
+  if (i > 3 && i < nodeArgs.length) {
+    movieName = "";
+    movieName = movieName + "+" + nodeArgs[i];
+    
+  }
+  else {
+    movieName = "";
+    movieName += nodeArgs[i];
+    
+  }
+}
+// Then run a request to the OMDB API with the movie specified
+var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&tomatoes=true&r=json";
+
+request(queryUrl, function(error, response, body) {
+  // If the request is successful
+  if (!error && response.statusCode === 200) {
+    // Parse the object for the data
+    console.log("Title: " + JSON.parse(body).Title);
+    console.log("Release Year: " + JSON.parse(body).Year);
+    console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+    console.log("Country Produced: " + JSON.parse(body).Country);
+    console.log("Language: " + JSON.parse(body).Language);
+    console.log("Plot: " + JSON.parse(body).Plot);
+    console.log("Actors: " + JSON.parse(body).Actors);
+    console.log("Rotten Tomatoes Rating.: " + JSON.parse(body).tomatoRating);
+    console.log("Rotten Tomatoes URL: " + JSON.parse(body).tomatoURL);        
+  }
+});
+
+}
 
 //do-what-it-says
