@@ -1,7 +1,6 @@
 //twitter keys section
 //read object from keys file
 var keys = require('./keys');
-
 //place keys in variables
 var consumer_key = keys.twitterKeys.consumer_key
 var consumer_secret = keys.twitterKeys.consumer_secret
@@ -36,9 +35,41 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
 });
 
 //spotify-this-song
-
-
-
+} else if (process.argv[2] === "spotify-this-song") {
+//spotify npm call
+var spotify = require('spotify');
+// Store all of the arguments in an array
+var nodeArgs = process.argv;
+// Create default if no song name given
+if (nodeArgs.length < 4) {
+    songName = "hello";
+// or an empty variable for the song name
+  } else {var songName = ""};
+// Loop through the node argument, inclusion of "+"s
+for (var i = 3; i < nodeArgs.length; i++) {
+  if (i > 3 && i < nodeArgs.length) {
+    songName = songName + "+" + nodeArgs[i];
+  } else {
+    songName += nodeArgs[i];
+  }
+} 
+// request to spotify 
+spotify.search({ type: 'track', query: songName }, function(err, data) {
+    if ( err ) {
+        console.log('Error occurred: ' + err);
+        return;
+    }
+    // log data
+     console.log("-------------------------------")
+     console.log("Performed by the Artist: "+ data.tracks.items[0].artists[0].name)
+     console.log("-------------------------------")
+     console.log("Your song's name: "+ data.tracks.items[0].name)
+     console.log("-------------------------------")
+     console.log("From the album: "+ data.tracks.items[0].album.name)
+     console.log("-------------------------------")
+     console.log("Preview your song at: "+ data.tracks.items[0].preview_url)
+     console.log("-------------------------------")     
+});
 
 //movie-this section
 //if movie data is requested
