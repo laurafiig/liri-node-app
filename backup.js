@@ -1,4 +1,4 @@
-//**********twitter keys section************
+//twitter keys section
 //read object from keys file
 var keys = require('./keys');
 //place keys in variables
@@ -6,10 +6,10 @@ var consumer_key = keys.twitterKeys.consumer_key
 var consumer_secret = keys.twitterKeys.consumer_secret
 var access_token_key = keys.twitterKeys.access_token_key
 var access_token_secret = keys.twitterKeys.access_token_secret
-//************************************
 
-//**********twitter function**********
-function myTweets() {
+//my-tweets section
+//if tweets are requested
+if (process.argv[2] === "my-tweets") {
 //twitter npm call
 var Twitter = require('twitter');
 //apply keys 
@@ -33,11 +33,9 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
     }
   }
 });
-}
-//************************************
 
-//**********spotify function**********
-function spotifyThis() {
+//spotify-this-song
+} else if (process.argv[2] === "spotify-this-song") {
 //spotify npm call
 var spotify = require('spotify');
 // Store all of the arguments in an array
@@ -72,11 +70,10 @@ spotify.search({ type: 'track', query: songName }, function(err, data) {
      console.log("Preview your song at: "+ data.tracks.items[0].preview_url)
      console.log("-------------------------------")     
 });
-}
-//************************************
 
-//**********movies function**********
-function movieThis() {
+//movie-this section
+//if movie data is requested
+} else if (process.argv[2] === "movie-this") {
 //omdb npm call
 var request = require("request");
 // Store all of the arguments in an array
@@ -96,7 +93,9 @@ for (var i = 3; i < nodeArgs.length; i++) {
 } 
 // request to OMDB 
 var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&tomatoes=true&r=json";
+
 request(queryUrl, function(error, response, body) {
+  
   if (!error && response.statusCode === 200) {
     // log the data
     console.log("Title: " + JSON.parse(body).Title);
@@ -110,21 +109,6 @@ request(queryUrl, function(error, response, body) {
     console.log("Rotten Tomatoes URL: " + JSON.parse(body).tomatoURL);        
   }
 });
-}
-//************************************
-
-//**********run section**********
-//if tweets are requested
-if (process.argv[2] === "my-tweets") {
-  //call tweet function
-  myTweets()
-//if spotify is requested
-} else if (process.argv[2] === "spotify-this-song") {
-  //call potify function
-  spotifyThis()
-//if movie data is requested
-} else if (process.argv[2] === "movie-this") {
-  movieThis()
 }
 
 //do-what-it-says
